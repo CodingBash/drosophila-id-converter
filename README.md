@@ -26,6 +26,8 @@ The `filename` is the input of the filename which is a TSV file with all ID and 
 
 If you are certain that the input is a gene DB ID, use the `gene_id` field. If certain that the input is a protein accession number, use the `protein_acc` field. If uncertain what the input ID is, use the `unknown` field and the script will find out (however the script will be slower).
 
+If an `unknown` field is provided, then the `gene_id` and `protein_acc` fields are ignored. If both the `gene_id` and `protein_acc` fields are provided, then the script will return the intersection of the matches from `gene_id` and `protein_acc` used separately.
+
 The `filename` is used to load the ID data. The `filename` is only required on the first method call, however, it is safe the include the `filename` on every call.
 
 The method will return a list of all gene name matches. A warning will output if the amount of matches is 0 or more than 1.
