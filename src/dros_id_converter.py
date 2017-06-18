@@ -1,10 +1,12 @@
 import csv
 
 class Entry:
-    def __init__(self, gene_id="", gene_name="", protein_acc=""):
-        self.gene_id = gene_id
+    def __init__(self, gene_db_id="", gene_name="", protein_acc="", protein_name="", protein_db_id=""):
+        self.gene_db_id = gene_db_id
         self.gene_name = gene_name
         self.protein_acc = protein_acc
+        self.protein_name = protein_name
+        self.protein_db_id = protein_db_id
         
 gene_container = list()
 
@@ -12,38 +14,28 @@ def read_id_file(filename):
     with open(filename, 'rt') as tsvin:
         tsvin = csv.reader(tsvin, delimiter='\t')    
         for row in tsvin:
-            gene_container.append(Entry(row[0], row[1], row[2]))
+            gene_container.append(Entry(row[1], row[0], row[3], row[2], row[4]))
     return gene_container
                 
-def retrieve_gene_name(gene_id="", protein_acc="", unknown="", filename=""):
+def retrieve_gene_name(term, filename=""):
     if len(gene_container) == 0:
         print("INFO: Loading " + filename)
         read_id_file(filename)
+        
     
-    search_gene_id = True if gene_id != "" else False
-    search_protein_acc = True if protein_acc != "" else False
-    search_unknown = True if unknown != "" else False
-    
-    matches = []
-    if search_unknown:
-        matches = list(set([entry.gene_name for entry in gene_container if entry.gene_id == unknown or entry.protein_acc == unknown]))
-    elif search_gene_id and not search_protein_acc:
-        matches = list(set([entry.gene_name for entry in gene_container if entry.gene_id == gene_id]))
-    elif search_protein_acc and not search_gene_id:
-        matches = list(set([entry.gene_name for entry in gene_container if entry.protein_acc == protein_acc]))
-    elif search_gene_id and search_protein_acc:
-        gene_id_matches = [entry.gene_name for entry in gene_container if entry.gene_id == gene_id]
-        protein_acc_matches = [entry.gene_name for entry in gene_container if entry.protein_acc == protein_acc]
-        matches = list(set(gene_id_matches) & set(protein_acc_matches))
+    matches = list(set([entry.gene_name for entry in gene_container if entry_exist(entry, term)]))    
     
     if len(matches) == 0:
-        print('WARNING: No matches found for gene_id="' + gene_id + '" and protein_acc="' + protein_acc + '"')
+        print('WARNING: No matches found for term="' + term + '"')
     elif len(matches) > 1:
-        print('WARNING: ' + str(len(matches)) + '  matches found for gene_id="' + gene_id + '" and protein_acc="' + protein_acc + '" with matches="' + str(matches) + '"')
+        print('WARNING: ' + str(len(matches)) + '  matches found for term="' + term + '"')
+    
     return matches
     
-    
+def entry_exist(entry, term):
+        return entry.gene_db_id == term or entry.protein_acc == term or entry.protein_name == term or entry.protein_db_id == term 
+
 # TEST
 if __name__ == "__main__":
-    print(retrieve_gene_name(gene_id="FBgn0000028", protein_acc="M9NH29", unknown="", filename="../res/gene_id_list.tsv"))
+    print(retrieve_gene_name(term="Q0E8P0_DROME", filename="../res/gene_id_list_2.tsv"))
     
