@@ -1,11 +1,10 @@
 import csv
 
 class Entry:
-    def __init__(self, gene_db_id="", gene_name="", protein_acc="", protein_name="", protein_db_id=""):
+    def __init__(self, protein_db_id="", protein_acc="", gene_db_id="", gene_name=""):
         self.gene_db_id = gene_db_id
         self.gene_name = gene_name
         self.protein_acc = protein_acc
-        self.protein_name = protein_name
         self.protein_db_id = protein_db_id
         
 gene_container = list()
@@ -14,7 +13,7 @@ def read_id_file(filename):
     with open(filename, 'rt') as tsvin:
         tsvin = csv.reader(tsvin, delimiter='\t')    
         for row in tsvin:
-            gene_container.append(Entry(row[1], row[0], row[3], row[2], row[4]))
+            gene_container.append(Entry(row[0], row[1], row[2], row[3]))
     return gene_container
                 
 def retrieve_gene_name(term, filename=""):
@@ -33,7 +32,7 @@ def retrieve_gene_name(term, filename=""):
     return matches
     
 def entry_exist(entry, term):
-        return entry.gene_db_id == term or entry.protein_acc == term or entry.protein_name == term or entry.protein_db_id == term 
+        return entry.gene_db_id == term or entry.protein_acc == term or entry.protein_db_id == term 
 
 # TEST
 if __name__ == "__main__":
