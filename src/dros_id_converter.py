@@ -15,7 +15,12 @@ def read_id_file(filenames):
         with open(file, 'rt') as tsvin:
             tsvin = csv.reader(tsvin, delimiter='\t')    
             for row in tsvin:
-                gene_container.append(Entry(row[0], row[1], row[2], row[3]))
+                sec_id =""
+                try:
+                    sec_id = row[4]
+                except IndexError:
+                    pass
+                gene_container.append(Entry(row[0], row[1], row[2], row[3], sec_id))
                 
 def retrieve_gene_name(term, filenames=[]):
     if len(gene_container) == 0:
@@ -38,5 +43,5 @@ def entry_exist(entry, term):
 
 # TEST
 if __name__ == "__main__":
-    print(retrieve_gene_name(term="A8DZ06_DROME", filenames=["../res/mortimer_gene_ids.txt", "../res/flymine_id_list_3.tsv"]))
+    print(retrieve_gene_name(term="FBGN0028916", filenames=["../res/mortimer_gene_ids.txt", "../res/flymine_id_list_3.tsv"]))
     
