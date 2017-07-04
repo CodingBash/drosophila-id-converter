@@ -28,9 +28,9 @@ def retrieve_gene_name(term, filenames=[]):
         read_id_file(filenames)
         
     
-    matches = list(set([(entry.gene_name, entry.sec_id) for entry in gene_container if entry_exist(entry, term)]))
+    matches = [(entry.gene_name, entry.sec_id) for entry in gene_container if entry_exist(entry, term)]
     gene_names, sec_ids = zip(*matches)
-    result= ([gene_name for gene_name in gene_names if gene_name.strip() != ""], [sec_id for sec_id in sec_ids if sec_id.strip() != ""])    
+    result= (list(set([gene_name for gene_name in gene_names if gene_name.strip() != ""])), list(set([sec_id for sec_id in sec_ids if sec_id.strip() != ""])))    
     if len(result[0]) == 0:
         print('WARNING: No matches found for term="' + term + '"')
     elif len(result[0]) > 1:
@@ -43,5 +43,5 @@ def entry_exist(entry, term):
 
 # TEST
 if __name__ == "__main__":
-    print(retrieve_gene_name(term="FBGN0028916", filenames=["../res/mortimer_gene_ids.txt", "../res/flymine_id_list_3.tsv"]))
+    print(retrieve_gene_name(term="FBGN0026401", filenames=["../res/mortimer_gene_ids.txt", "../res/flymine_id_list_3.tsv"]))
     
