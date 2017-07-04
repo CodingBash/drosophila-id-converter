@@ -6,6 +6,6 @@ if __name__ == "__main__":
 
     print("\nIterating term list")
     for input_term in unknown_term_list:
-        print(str(rgn(term=input_term , filename="../res/mortimer_gene_ids.txt")))
+        print(str(rgn(term=input_term , filenames=["../res/mortimer_gene_ids.txt", "../res/flymine_id_list_3.tsv"])))
         
     
