@@ -22,9 +22,9 @@ def read_id_file(filenames):
                     pass
                 gene_container.append(Entry(row[0], row[1], row[2], row[3], sec_id))
                 
-def retrieve_gene_name(term, filenames=[]):
+def retrieve_gene_name(term, filenames=[], debug=True):
     if len(gene_container) == 0:
-        print("INFO: Loading " + str(filenames))
+        if debug: print("INFO: Loading " + str(filenames))
         read_id_file(filenames)
         
     
@@ -32,9 +32,9 @@ def retrieve_gene_name(term, filenames=[]):
     gene_names, sec_ids = zip(*matches)
     result= (list(set([gene_name for gene_name in gene_names if gene_name.strip() != ""])), list(set([sec_id for sec_id in sec_ids if sec_id.strip() != ""])))    
     if len(result[0]) == 0:
-        print('WARNING: No matches found for term="' + term + '"')
-    elif len(result[0]) > 1:
-        print('WARNING: ' + str(len(matches)) + '  matches found for term="' + term + '"')
+        if debug: print('WARNING: No matches found for term="' + term + '"')
+    elif debug and len(result[0]) > 1:
+        if debug: print('WARNING: ' + str(len(result[0])) + '  matches found for term="' + term + '"')
     
     return result
     
@@ -43,5 +43,5 @@ def entry_exist(entry, term):
 
 # TEST
 if __name__ == "__main__":
-    print(retrieve_gene_name(term="FBGN0026401", filenames=["../res/mortimer_gene_ids.txt", "../res/flymine_id_list_3.tsv"]))
+    print(retrieve_gene_name(term="FBGN0026401", filenames=["../res/mortimer_gene_ids.txt", "../res/flymine_id_list_3.tsv"], debug=False))
     
